@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-// import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
+import { useCreateUserMutation } from "../features/counter/userSlicer";
+
 const Add = () => {
+  const [createUser, responseInfo] = useCreateUserMutation();
   const {
     register,
     handleSubmit,
@@ -18,16 +19,20 @@ const Add = () => {
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
 
-  const postData = () => {
-    axios.post(`/user`, { name, email, age, gender });
-    history.push("/");
+  const newUser = {
+    name: name,
+    email: email,
+    age: age,
+    gender: gender,
   };
 
   return (
     <React.Fragment>
       <h1 className="text-center mt-3">User Add Screen</h1>
       <Form
-        onSubmit={handleSubmit((event) => postData())}
+        onSubmit={handleSubmit((event) => {
+          createUser(newUser);
+        })}
         className="d-grid gap-2 text-center"
       >
         <Form.Group controlId="name">
@@ -75,9 +80,9 @@ const Add = () => {
           <Form.Control
             type="text"
             placeholder="Enter Age"
-            required
+            // required
             {...register("age", {
-              required: "Date of Birth is required...!",
+              required: "Age is required...!",
             })}
             value={age}
             onChange={(event) => setAge(event.target.value)}
@@ -89,9 +94,9 @@ const Add = () => {
           <Form.Control
             type="text"
             placeholder="Enter Gender"
-            required
+            // required
             {...register("gender", {
-              required: "Date of Birth is required...!",
+              required: "Gender is required...!",
             })}
             value={gender}
             onChange={(event) => setGender(event.target.value)}

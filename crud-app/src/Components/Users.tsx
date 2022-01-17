@@ -4,23 +4,20 @@ import { Button, Table } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import axios from "axios";
 
+import { useGetAllUsersQuery, useDeleteUserMutation } from "../features/counter/userSlicer";
+
 const Users = () => {
-  const [users, setUsers] = useState<any[]>([]);
+  const responseInfo = useGetAllUsersQuery("");
 
-  useEffect(() => {
-    axios
-      .get(`/user`)
-      .then(({ data }) => {
-        setUsers(data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+  const users = responseInfo.data;
 
-  const onDelete = (id: string) => {
-    axios.delete(`user/${id}`).catch((error) => console.log(error));
-    alert("Data Deleted");
-    window.location.reload();
-  };
+  const [deleteUser, response] = useDeleteUserMutation();
+
+  // const onDelete = (id: string) => {
+  //   axios.delete(`user/${id}`).catch((error) => console.log(error));
+  //   alert("Data Deleted");
+  //   window.location.reload();
+  // };
 
   return (
     <React.Fragment>
@@ -36,7 +33,7 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {users?.map((user: any) => (
             <tr className="text-capitalize" key={user._id}>
               <td>{user._id}</td>
               <td>{user.name}</td>
@@ -53,7 +50,7 @@ const Users = () => {
                 <Button
                   variant="danger"
                   className="btn-mb"
-                  onClick={() => onDelete(user._id)}
+                  onClick={() => {deleteUser(user._id)}}
                 >
                   <i className="fas fa-trash"></i>
                 </Button>

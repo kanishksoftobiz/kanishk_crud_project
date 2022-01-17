@@ -1,14 +1,22 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
-// import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import {
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+} from "../features/counter/userSlicer";
 
 const Edit = () => {
   let history = useHistory();
   let params: any = useParams();
   const id = params.id;
+
+  const response = useGetUserByIdQuery(id);
+  const [updateUser, responseInfo] = useUpdateUserMutation();
+
+  console.log(response.data);
 
   const {
     register,
@@ -20,6 +28,13 @@ const Edit = () => {
   const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
+
+  const updatedUserData = {
+    name: name,
+    email: email,
+    age: age,
+    gender: gender,
+  };
 
   useEffect(() => {
     axios
@@ -97,7 +112,7 @@ const Edit = () => {
             placeholder="Enter Age"
             required
             {...register("age", {
-              required: "Date of Birth is required...!",
+              required: "Age is required...!",
             })}
             value={age}
             onChange={(event) => setAge(event.target.value)}
@@ -111,18 +126,14 @@ const Edit = () => {
             placeholder="Enter Gender"
             required
             {...register("gender", {
-              required: "Date of Birth is required...!",
+              required: "Gender is required...!",
             })}
             value={gender}
             onChange={(event) => setGender(event.target.value)}
           />
           {errors.gender && errors.gender.message}
         </Form.Group>
-        <Button
-          type="submit"
-          className="mt-3"
-          variant="primary"
-        >
+        <Button type="submit" className="mt-3" variant="primary">
           Update User
         </Button>
       </Form>
