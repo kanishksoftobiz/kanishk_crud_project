@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { Button, Table } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import axios from "axios";
 
 import { useGetAllUsersQuery, useDeleteUserMutation } from "../features/counter/userSlicer";
 
@@ -12,12 +10,6 @@ const Users = () => {
   const users = responseInfo.data;
 
   const [deleteUser, response] = useDeleteUserMutation();
-
-  // const onDelete = (id: string) => {
-  //   axios.delete(`user/${id}`).catch((error) => console.log(error));
-  //   alert("Data Deleted");
-  //   window.location.reload();
-  // };
 
   return (
     <React.Fragment>
