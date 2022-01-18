@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
-import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
@@ -16,8 +15,6 @@ const Edit = () => {
   const response = useGetUserByIdQuery(id);
   const [updateUser, responseInfo] = useUpdateUserMutation();
 
-  console.log(response.data);
-
   const {
     register,
     handleSubmit,
@@ -30,6 +27,7 @@ const Edit = () => {
   const [gender, setGender] = useState("");
 
   const updatedUserData = {
+    id: id,
     name: name,
     email: email,
     age: age,
@@ -37,34 +35,19 @@ const Edit = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`/user/${id}`)
-      .then(({ data }) => {
-        setName(data.name);
-        setEmail(data.email);
-        setAge(data.age);
-        setGender(data.gender);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  const updateData = () => {
-    axios
-      .put(`/user/${id}`, {
-        name,
-        email,
-        age,
-        gender,
-      })
-      .catch((error) => console.log(error));
-    history.push("/");
-  };
+    setName(response.data?.name || "");
+    setEmail(response.data?.email || "");
+    setAge(response.data?.age || "");
+    setGender(response.data?.gender || "");
+  }, [response]);
 
   return (
     <React.Fragment>
       <h1 className="text-center mt-3">User Edit Screen</h1>
       <Form
-        onSubmit={handleSubmit((event) => updateData())}
+        onSubmit={handleSubmit((event) => {
+          updateUser(updatedUserData);
+        })}
         className="d-grid gap-2 text-center"
       >
         <Form.Group controlId="name">

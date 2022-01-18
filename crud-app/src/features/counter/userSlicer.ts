@@ -27,7 +27,7 @@ export const usersApi = createApi({
 
     createUser: builder.mutation({
       query: (newUser) => {
-        console.log("user Creadet =>", newUser);
+        // console.log("user Creadet =>", newUser);
         return {
           url: `user`,
           method: "POST",
@@ -51,9 +51,9 @@ export const usersApi = createApi({
 
     updateUser: builder.mutation({
       query: (updateUserData) => {
-        console.log("Updated User => ", updateUserData);
+        // console.log("Updated User => ", updateUserData);
         const {id, ...data } = updateUserData;
-        console.log("Actual Updated Post", data);
+        // console.log("Actual Updated Post", data);
         return {
           url: `user/${id}`,
           method: 'PUT',
